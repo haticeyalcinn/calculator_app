@@ -1,17 +1,44 @@
-# calculator_app
+# Calculator App
 
-A new Flutter project.
+Modern ve kullanıcı dostu bir Flutter hesap makinesi uygulaması. Basit matematiksel işlemleri hızlı ve güvenilir şekilde gerçekleştirmek için tasarlanmıştır.
 
-## Getting Started
+## Özellikler
 
-This project is a starting point for a Flutter application.
+- ✨ Temiz ve intuitif kullanıcı arayüzü
+- 🔢 Temel matematiksel işlemler (toplama, çıkarma, çarpma, bölme)
+- 📱 Tüm platformlarda çalışır (iOS, Android, Web, Linux, macOS, Windows)
+- ⚡ Hızlı ve responsif performans
+- 🎨 Modern tasarım ve animasyonlar
 
-A few resources to get you started if this is your first Flutter project:
+## Kurulum
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+### Gereksinimler
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter SDK (en az 3.0.0 sürümü)
+- Dart SDK
+
+### Adımlar
+
+1. Projeyi klonlayın:
+```bash
+git clone <repository-url>
+cd calculator_app
+```
+
+2. Bağımlılıkları yükleyin:
+```bash
+flutter pub get
+```
+
+3. Uygulamayı çalıştırın:
+```bash
+flutter run
+```
+
+## Katkıda Bulunun
+
+Hata bulduysanız veya öneriniz varsa, lütfen bir issue açın veya pull request gönderin.
+
+## Lisans
+
+Bu proje MIT lisansı altında yayınlanmıştır. Daha fazla bilgi için [LICENSE](LICENSE) dosyasına bakın.
