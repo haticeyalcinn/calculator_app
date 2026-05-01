@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'constants/app_colors.dart';
 
 void main() {
   runApp(const CalculatorApp());
@@ -33,15 +34,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   String _expression = '';
   String _display = '0';
 
-  // Button colors
-  static const Color _bgDark = Color(0xFF1E1E1E);
-  static const Color _btnDark = Color(0xFF2D2D2D);
-  static const Color _btnScientific = Color(0xFF4A7A8A);
-  static const Color _btnOrange = Color(0xFFFF9500);
-  static const Color _btnRed = Color(0xFFE53935);
-  static const Color _btnGreen = Color(0xFF43A047);
-  static const Color _btnPink = Color(0xFFE91E63);
-
   void _onButtonPressed(String label) {
     setState(() {
       switch (label) {
@@ -67,14 +59,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   void _calculate() {
     try {
-      // Replace display-friendly symbols with math equivalents
       String expr = _expression
           .replaceAll('×', '*')
           .replaceAll('÷', '/')
           .replaceAll('π', pi.toString())
           .replaceAll('e', e.toString());
 
-      // Handle sqrt(
       expr = _processFunctions(expr);
 
       final result = _evalExpression(expr);
@@ -82,7 +72,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       if (result == result.truncateToDouble()) {
         _display = result.toInt().toString();
       } else {
-        _display = result.toStringAsFixed(8).replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
+        _display = result
+            .toStringAsFixed(8)
+            .replaceAll(RegExp(r'0+$'), '')
+            .replaceAll(RegExp(r'\.$'), '');
       }
       _expression = _display;
     } catch (e) {
@@ -92,7 +85,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   String _processFunctions(String expr) {
-    // sin(x), cos(x), tan(x), log(x), sqrt(x)
     expr = _replaceFunctionCalls(expr, 'sin', (x) => sin(x * pi / 180));
     expr = _replaceFunctionCalls(expr, 'cos', (x) => cos(x * pi / 180));
     expr = _replaceFunctionCalls(expr, 'tan', (x) => tan(x * pi / 180));
@@ -101,7 +93,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     return expr;
   }
 
-  String _replaceFunctionCalls(String expr, String funcName, double Function(double) func) {
+  String _replaceFunctionCalls(
+      String expr, String funcName, double Function(double) func) {
     final regex = RegExp('$funcName\\(([^()]+)\\)');
     while (regex.hasMatch(expr)) {
       expr = expr.replaceAllMapped(regex, (match) {
@@ -114,17 +107,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   }
 
   double _evalExpression(String expr) {
-    // Handle ^ (power)
     expr = expr.replaceAllMapped(
       RegExp(r'([\d.]+)\^([\d.]+)'),
-      (m) => pow(double.parse(m.group(1)!), double.parse(m.group(2)!)).toString(),
+      (m) => pow(double.parse(m.group(1)!), double.parse(m.group(2)!))
+          .toString(),
     );
-
-    // Simple recursive descent parser
     return _parseExpr(expr.replaceAll(' ', ''));
   }
 
-  // Simple expression evaluator (+-*/)
   int _pos = 0;
   String _currentExpr = '';
 
@@ -166,14 +156,13 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   double _parsePrimary() {
     if (_pos < _currentExpr.length && _currentExpr[_pos] == '(') {
-      _pos++; // skip '('
+      _pos++;
       final result = _parseAddSub();
       if (_pos < _currentExpr.length && _currentExpr[_pos] == ')') {
-        _pos++; // skip ')'
+        _pos++;
       }
       return result;
     }
-    // Parse number
     int start = _pos;
     while (_pos < _currentExpr.length &&
         (RegExp(r'[\d.]').hasMatch(_currentExpr[_pos]))) {
@@ -221,11 +210,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _bgDark,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            // Title
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -238,7 +226,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 ),
               ),
             ),
-            // Display
             Expanded(
               child: Container(
                 color: Colors.black,
@@ -260,58 +247,50 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 ),
               ),
             ),
-            // Buttons
             Container(
-              color: _bgDark,
+              color: AppColors.background,
               padding: const EdgeInsets.all(4),
               child: Column(
                 children: [
-                  // Row 1: sin, cos, tan, log
                   Row(children: [
-                    _buildButton(label: 'sin(', color: _btnScientific, fontSize: 16),
-                    _buildButton(label: 'cos(', color: _btnScientific, fontSize: 16),
-                    _buildButton(label: 'tan(', color: _btnScientific, fontSize: 16),
-                    _buildButton(label: 'log(', color: _btnScientific, fontSize: 16),
+                    _buildButton(label: 'sin(', color: AppColors.scientific, fontSize: 16),
+                    _buildButton(label: 'cos(', color: AppColors.scientific, fontSize: 16),
+                    _buildButton(label: 'tan(', color: AppColors.scientific, fontSize: 16),
+                    _buildButton(label: 'log(', color: AppColors.scientific, fontSize: 16),
                   ]),
-                  // Row 2: sqrt, ^, (, )
                   Row(children: [
-                    _buildButton(label: 'sqrt(', color: _btnScientific, fontSize: 15),
-                    _buildButton(label: '^', color: _btnScientific),
-                    _buildButton(label: '(', color: _btnScientific),
-                    _buildButton(label: ')', color: _btnScientific),
+                    _buildButton(label: 'sqrt(', color: AppColors.scientific, fontSize: 15),
+                    _buildButton(label: '^', color: AppColors.scientific),
+                    _buildButton(label: '(', color: AppColors.scientific),
+                    _buildButton(label: ')', color: AppColors.scientific),
                   ]),
-                  // Row 3: 7, 8, 9, ÷
                   Row(children: [
-                    _buildButton(label: '7', color: _btnDark),
-                    _buildButton(label: '8', color: _btnDark),
-                    _buildButton(label: '9', color: _btnDark),
-                    _buildButton(label: '÷', color: _btnOrange),
+                    _buildButton(label: '7', color: AppColors.buttonDark),
+                    _buildButton(label: '8', color: AppColors.buttonDark),
+                    _buildButton(label: '9', color: AppColors.buttonDark),
+                    _buildButton(label: '÷', color: AppColors.orange),
                   ]),
-                  // Row 4: 4, 5, 6, ×
                   Row(children: [
-                    _buildButton(label: '4', color: _btnDark),
-                    _buildButton(label: '5', color: _btnDark),
-                    _buildButton(label: '6', color: _btnDark),
-                    _buildButton(label: '×', color: _btnOrange),
+                    _buildButton(label: '4', color: AppColors.buttonDark),
+                    _buildButton(label: '5', color: AppColors.buttonDark),
+                    _buildButton(label: '6', color: AppColors.buttonDark),
+                    _buildButton(label: '×', color: AppColors.orange),
                   ]),
-                  // Row 5: 1, 2, 3, -
                   Row(children: [
-                    _buildButton(label: '1', color: _btnDark),
-                    _buildButton(label: '2', color: _btnDark),
-                    _buildButton(label: '3', color: _btnDark),
-                    _buildButton(label: '-', color: _btnOrange),
+                    _buildButton(label: '1', color: AppColors.buttonDark),
+                    _buildButton(label: '2', color: AppColors.buttonDark),
+                    _buildButton(label: '3', color: AppColors.buttonDark),
+                    _buildButton(label: '-', color: AppColors.orange),
                   ]),
-                  // Row 6: 0, ., ⌫, +
                   Row(children: [
-                    _buildButton(label: '0', color: _btnDark),
-                    _buildButton(label: '.', color: _btnDark),
-                    _buildButton(label: '⌫', color: _btnPink),
-                    _buildButton(label: '+', color: _btnOrange),
+                    _buildButton(label: '0', color: AppColors.buttonDark),
+                    _buildButton(label: '.', color: AppColors.buttonDark),
+                    _buildButton(label: '⌫', color: AppColors.pink),
+                    _buildButton(label: '+', color: AppColors.orange),
                   ]),
-                  // Row 7: C (span 2), = (span 2)
                   Row(children: [
-                    _buildButton(label: 'C', color: _btnRed, flex: 2),
-                    _buildButton(label: '=', color: _btnGreen, flex: 2),
+                    _buildButton(label: 'C', color: AppColors.red, flex: 2),
+                    _buildButton(label: '=', color: AppColors.green, flex: 2),
                   ]),
                 ],
               ),
